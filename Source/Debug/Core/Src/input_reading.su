@@ -1,0 +1,5 @@
+../Core/Src/input_reading.c:29:6:Input_Reading_Init	16	static
+../Core/Src/input_reading.c:37:9:IsIndexValid	16	static
+../Core/Src/input_reading.c:41:9:IsButtonPressed	16	static
+../Core/Src/input_reading.c:45:9:IsButtonPressedOneSec	16	static
+../Core/Src/input_reading.c:51:6:ButtonReading	24	static

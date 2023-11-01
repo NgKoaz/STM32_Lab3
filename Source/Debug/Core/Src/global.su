@@ -1,0 +1,2 @@
+../Core/Src/global.c:22:6:Traffic_Light_Reset	4	static
+../Core/Src/global.c:32:6:Global_Init	8	static
