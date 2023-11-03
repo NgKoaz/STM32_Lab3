@@ -1,2 +1,2 @@
-../Core/Src/traffic_light.c:18:6:WritePinLED	16	static
-../Core/Src/traffic_light.c:26:6:TogglePinLED	16	static
+../Core/Src/traffic_light.c:19:6:WritePinLED	16	static
+../Core/Src/traffic_light.c:28:6:TogglePinLED	16	static

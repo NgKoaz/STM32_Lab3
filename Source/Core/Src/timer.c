@@ -8,25 +8,26 @@
 
 #include "timer.h"
 
-short counter[NO_OF_TIMER];
-short flagTimer[NO_OF_TIMER];
+uint32_t counter[NO_TIMER];
+uint8_t flag[NO_TIMER];
 
 void SetTimer(const int duration, const short index){
 	counter[index] = duration / TIMER_CYCLE;
-	flagTimer[index] = 0;
+	flag[index] = 0;
 }
 short GetFlagTimer(const short index){
-	return flagTimer[index];
+	return flag[index];
 }
-void TimerRun(const short index){
+void timerRun(const short index){
 	if (counter[index] <= 0) return;
 	counter[index]--;
 	if (counter[index] <= 0) {
-		flagTimer[index] = 1;
+		flag[index] = 1;
 	}
 }
 
 void AllTimerRun(void){
-	TimerRun(TIMER_FOR_READING);
-	TimerRun(TIMER_FOR_DISPLAYING_LED);
+	timerRun(READING_TIMER);
+	timerRun(SCANNING_TIMER);
+	timerRun(BLINKING_TIMER);
 }

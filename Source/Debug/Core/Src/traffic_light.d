@@ -26,7 +26,7 @@ Core/Src/traffic_light.o: ../Core/Src/traffic_light.c \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h \
  ../Core/Inc/input_processing.h ../Core/Inc/global.h \
  ../Core/Inc/input_reading.h ../Core/Inc/timer.h \
- ../Core/Inc/traffic_light.h
+ ../Core/Inc/traffic_light.h ../Core/Inc/led7seg.h
 ../Core/Inc/traffic_light.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:
@@ -58,3 +58,4 @@ Core/Src/traffic_light.o: ../Core/Src/traffic_light.c \
 ../Core/Inc/input_reading.h:
 ../Core/Inc/timer.h:
 ../Core/Inc/traffic_light.h:
+../Core/Inc/led7seg.h:

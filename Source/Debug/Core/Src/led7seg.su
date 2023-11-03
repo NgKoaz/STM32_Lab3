@@ -1,0 +1,4 @@
+../Core/Src/led7seg.c:32:6:LED7SEG_Init	16	static
+../Core/Src/led7seg.c:41:6:UpdateBuffer7SEG	16	static
+../Core/Src/led7seg.c:71:6:UpdateDatabus7SEG	24	static
+../Core/Src/led7seg.c:90:6:Scanning7SEG	8	static

@@ -10,12 +10,15 @@
 
 #include "global.h"
 
-#define SECOND 					1000
-#define HALF_SECOND 			500
-#define DURATION_FOR_INCREASE 	200
-#define CYCLE DURATION_FOR_EACH_READING
+//After we hold modify button more than 1s,
+//it will increase after this milisecond.
+#define INCREASING_PERIOD 	100
 
-extern int general_counter;
+typedef enum{
+	RELEASED,
+	PRESSED,
+	PRESSED_MORE_THAN_ONE_SECOND
+} ButtonState;
 
 void Input_Processing_Init(void);
 
@@ -24,7 +27,7 @@ void FSM_ProcessingModifyButton(void);
 void FSM_ProcessingSelectModeButton(void);
 
 //change display
-void FSM_ForProcessingState(void);
+void FSM_ForStateProcessing(void);
 
 
 #endif /* INC_INPUT_PROCESSING_H_ */

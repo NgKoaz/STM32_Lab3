@@ -21,9 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "input_processing.h"
-#include "led_display.h"
-#include "traffic_light.h"
+#include "global.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -55,7 +53,6 @@ static void MX_GPIO_Init(void);
 static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
-void UpdateBuffer7SEG(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -93,11 +90,11 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
+  //Initialize......
   Input_Reading_Init();
   Input_Processing_Init();
   LED7SEG_Init();
   Global_Init();
-
 
   HAL_TIM_Base_Start_IT(&htim2);
   /* USER CODE END 2 */
@@ -105,14 +102,15 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
+  SetTimer(READING_PERIOD, READING_TIMER);
+  SetTimer(SCANNING_PERIOD, SCANNING_TIMER);
+  SetTimer(BLINKING_PERIOD, BLINKING_TIMER);
 
-  SetTimer(DURATION_FOR_EACH_READING, TIMER_FOR_READING);
-  SetTimer(DURATION_FOR_EACH_DISPLAYING_LED, TIMER_FOR_DISPLAYING_LED);
   while (1)
   {
-	  if (GetFlagTimer(TIMER_FOR_READING)){
+	  if (GetFlagTimer(READING_TIMER)){
 		  //Reset timer
-		  SetTimer(DURATION_FOR_EACH_READING, TIMER_FOR_READING);
+		  SetTimer(READING_PERIOD, READING_TIMER);
 
 		  //Reading
 		  ButtonReading(SET_BTN);
@@ -125,15 +123,23 @@ int main(void)
 		  FSM_ProcessingSelectModeButton();
 
 		  //State Processing
-		  FSM_ForProcessingState();
+		  FSM_ForStateProcessing();
 	  }
 
 	  //Display 7 SEG LEDs
-	  if (GetFlagTimer(TIMER_FOR_DISPLAYING_LED)){
+	  if (GetFlagTimer(SCANNING_TIMER)){
 		  //Reset timer
-		  SetTimer(DURATION_FOR_EACH_DISPLAYING_LED, TIMER_FOR_DISPLAYING_LED);
+		  SetTimer(SCANNING_PERIOD, SCANNING_TIMER);
 
 		  Scanning7SEG();
+	  }
+
+	  //Blinking
+	  if (GetFlagTimer(BLINKING_TIMER)){
+		  //Reset timer
+		  SetTimer(BLINKING_PERIOD, BLINKING_TIMER);
+
+		  HAL_GPIO_TogglePin(Single_LED_GPIO_Port, Single_LED_Pin);
 	  }
 
 

@@ -11,6 +11,7 @@
 #include "main.h"
 #include "input_processing.h"
 
+
 void WritePinLED(const short index, uint8_t state);
 
 void TogglePinLED(uint8_t state);

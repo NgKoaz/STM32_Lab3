@@ -7,10 +7,12 @@
 
 #include "input_processing.h"
 
-ButtonState buttonState[NO_OF_BUTTON];
+ButtonState buttonState[NO_BUTTON];
 
-int general_counter;
-int modbtn_counter;
+//For blinking led when we switch in modify mode.
+int blinking_counter;
+//This counter for modify button after amount of time it increase `adjusting variable`.
+int increasing_counter;
 
 void Input_Processing_Init(void)
 {
@@ -18,8 +20,8 @@ void Input_Processing_Init(void)
 	buttonState[MOD_BTN] = RELEASED;
 	buttonState[SEL_BTN] = RELEASED;
 
-	general_counter = 1;
-	modbtn_counter = DURATION_FOR_INCREASE / CYCLE;
+	blinking_counter = 1;
+	increasing_counter = INCREASING_PERIOD / COUNTER_CYCLE;
 }
 
 void IncreaseOne(uint8_t* duration){
@@ -30,13 +32,13 @@ void FSM_IncreasingValue(void){
 	case NORMAL_MODE:
 		break;
 	case MODIFY_DURATION_RED_MODE:
-		IncreaseOne(&temp_duRed);
+		IncreaseOne(&adjust_duRed);
 		break;
 	case MODIFY_DURATION_AMBER_MODE:
-		IncreaseOne(&temp_duAmber);
+		IncreaseOne(&adjust_duAmber);
 		break;
 	case MODIFY_DURATION_GREEN_MODE:
-		IncreaseOne(&temp_duGreen);
+		IncreaseOne(&adjust_duGreen);
 		break;
 	}
 }
@@ -44,21 +46,23 @@ void FSM_ChangingMode(void){
 	//Turn off all LEDs.
 	WritePinLED(0, ~RED | ~AMBER | ~GREEN);
 	WritePinLED(1, ~RED | ~AMBER | ~GREEN);
+
+	//Changing state and initial new value for new mode.
 	switch(runState){
 	case NORMAL_MODE:
 		runState = MODIFY_DURATION_RED_MODE;
-		general_counter = HALF_SECOND / CYCLE;;
-		temp_duRed = durationRed;
+		blinking_counter = HALF_SECOND / COUNTER_CYCLE;
+		adjust_duRed = durationRed;
 		break;
 	case MODIFY_DURATION_RED_MODE:
 		runState = MODIFY_DURATION_AMBER_MODE;
-		general_counter = HALF_SECOND / CYCLE;;
-		temp_duAmber = durationAmber;
+		blinking_counter = HALF_SECOND / COUNTER_CYCLE;
+		adjust_duAmber = durationAmber;
 		break;
 	case MODIFY_DURATION_AMBER_MODE:
 		runState = MODIFY_DURATION_GREEN_MODE;
-		general_counter = HALF_SECOND / CYCLE;;
-		temp_duGreen = durationGreen;
+		blinking_counter = HALF_SECOND / COUNTER_CYCLE;
+		adjust_duGreen = durationGreen;
 		break;
 	case MODIFY_DURATION_GREEN_MODE:
 		runState = NORMAL_MODE;
@@ -71,13 +75,13 @@ void FSM_SettingValue(void){
 	case NORMAL_MODE:
 		break;
 	case MODIFY_DURATION_RED_MODE:
-		durationRed = temp_duRed;
+		durationRed = adjust_duRed;
 		break;
 	case MODIFY_DURATION_AMBER_MODE:
-		durationAmber = temp_duAmber;
+		durationAmber = adjust_duAmber;
 		break;
 	case MODIFY_DURATION_GREEN_MODE:
-		durationGreen = temp_duGreen;
+		durationGreen = adjust_duGreen;
 		break;
 	}
 }
@@ -110,14 +114,16 @@ void FSM_ProcessingSetValueButton(void){
 }
 void FSM_ProcessingModifyButton(void){
 	FSM_ForInputProcessing(FSM_IncreasingValue, MOD_BTN);
+	//Handle when button hold more than one second
+	//increase `adjusting value` after INCREASING_PERIOD ms
 	if (buttonState[MOD_BTN] == PRESSED_MORE_THAN_ONE_SECOND) {
-		modbtn_counter--;
-		if (modbtn_counter <= 0) {
-			modbtn_counter = DURATION_FOR_INCREASE / CYCLE;
+		increasing_counter--;
+		if (increasing_counter <= 0) {
+			increasing_counter = INCREASING_PERIOD / COUNTER_CYCLE;
 			FSM_IncreasingValue();
 		}
 	} else {
-		modbtn_counter = DURATION_FOR_INCREASE / CYCLE;
+		increasing_counter = INCREASING_PERIOD / COUNTER_CYCLE;
 	}
 }
 void FSM_ProcessingSelectModeButton(void){
@@ -129,64 +135,65 @@ void FSM_TrafficLight(const short index){
 	light_counter[index]--;
 	switch (ledState[index]){
 	case RED:
-		//Display Red LED.
+		//Display only Red LED.
 		WritePinLED(index, RED);
 		//After amount of time, it will switch to Green.
 		if (light_counter[index] <= 0) {
-			light_counter[index] = durationGreen * SECOND / CYCLE;
+			light_counter[index] = durationGreen * ONE_SECOND / COUNTER_CYCLE;
 			ledState[index] = GREEN;
 		}
 		break;
 
 	case AMBER:
-		//Display Amber LED.
+		//Display only Amber LED.
 		WritePinLED(index, AMBER);
 		//After amount of time, it will switch to Red.
 		if (light_counter[index] <= 0) {
-			light_counter[index] = durationRed * SECOND / CYCLE;
+			light_counter[index] = durationRed * ONE_SECOND / COUNTER_CYCLE;
 			ledState[index] = RED;
 		}
 		break;
 
 	case GREEN:
-		//Display Green LED.
+		//Display only Green LED.
 		WritePinLED(index, GREEN);
 		//After amount of time, it will switch to Amber.
 		if (light_counter[index] <= 0) {
-			light_counter[index] = durationAmber * SECOND / CYCLE;
+			light_counter[index] = durationAmber * ONE_SECOND / COUNTER_CYCLE;
 			ledState[index] = AMBER;
 		}
 		break;
 	}
 }
 
-void FSM_ForProcessingState(void){
+void FSM_ForStateProcessing(void){
 	switch (runState){
 	case NORMAL_MODE:
+		//Run 2 traffic light FSMs.
 		FSM_TrafficLight(0);
 		FSM_TrafficLight(1);
 		break;
 	case MODIFY_DURATION_RED_MODE:
 		//Blinking Red LED in 0.5s
-		general_counter--;
-		if (general_counter <= 0) {
-			general_counter = HALF_SECOND / CYCLE;
+		blinking_counter--;
+		if (blinking_counter <= 0) {
+			blinking_counter = HALF_SECOND / COUNTER_CYCLE;
 			TogglePinLED(RED);
 		}
 		break;
 	case MODIFY_DURATION_AMBER_MODE:
 		//Blinking Amber LED in 0.5s
-		general_counter--;
-		if (general_counter <= 0) {
-			general_counter = HALF_SECOND / CYCLE;
+		blinking_counter--;
+		if (blinking_counter <= 0) {
+			blinking_counter = HALF_SECOND / COUNTER_CYCLE;
 			TogglePinLED(AMBER);
 		}
 		break;
 	case MODIFY_DURATION_GREEN_MODE:
 		//Blinking Green LED in 0.5s
-		general_counter--;
-		if (general_counter <= 0) {
-			general_counter = HALF_SECOND / CYCLE;
+		blinking_counter--;
+		if (blinking_counter <= 0) {
+			blinking_counter = HALF_SECOND / COUNTER_CYCLE;
 			TogglePinLED(GREEN);
 		}
 		break;

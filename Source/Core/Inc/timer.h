@@ -8,15 +8,25 @@
 #ifndef INC_TIMER_H_
 #define INC_TIMER_H_
 
-#define NO_OF_TIMER 						2
-#define TIMER_FOR_READING 					0
-#define TIMER_FOR_DISPLAYING_LED			1
+#include "main.h"
 
-#define DURATION_FOR_EACH_READING 					10
-#define DURATION_FOR_EACH_DISPLAYING_LED 			10
+//Number of timer
+#define NO_TIMER 							3
 
+//Index of each timer
+#define READING_TIMER 						0
+#define SCANNING_TIMER						1
+#define BLINKING_TIMER						2
+
+#define READING_PERIOD 						10
+#define SCANNING_PERIOD 					10
+#define BLINKING_PERIOD						500
+
+#define ONE_SECOND 							1000
+#define HALF_SECOND 						500
 
 #define TIMER_CYCLE 10
+
 
 //Just use the index and duration is defined above.
 void SetTimer(const int duration, const short index);
