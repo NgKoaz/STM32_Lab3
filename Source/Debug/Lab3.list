@@ -145,7 +145,6 @@ void Global_Init(void){
 
 	Traffic_Light_Reset();
  80001b6:	f7ff ffc9 	bl	800014c <Traffic_Light_Reset>
-
 }
  80001ba:	bf00      	nop
  80001bc:	bd80      	pop	{r7, pc}
