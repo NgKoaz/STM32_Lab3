@@ -8,4 +8,4 @@
 ../Core/Src/input_processing.c:115:6:FSM_ProcessingModifyButton	8	static
 ../Core/Src/input_processing.c:129:6:FSM_ProcessingSelectModeButton	8	static
 ../Core/Src/input_processing.c:134:6:FSM_TrafficLight	16	static
-../Core/Src/input_processing.c:169:6:FSM_ForStateProcessing	8	static
+../Core/Src/input_processing.c:169:6:FSM_ForRunStateProcessing	8	static

@@ -123,7 +123,7 @@ int main(void)
 		  FSM_ProcessingSelectModeButton();
 
 		  //State Processing
-		  FSM_ForStateProcessing();
+		  FSM_ForRunStateProcessing();
 	  }
 
 	  //Display 7 SEG LEDs

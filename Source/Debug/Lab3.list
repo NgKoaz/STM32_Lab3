@@ -37,11 +37,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_line   000081f5  00000000  00000000  0002c118  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_str    00002fdf  00000000  00000000  0003430d  2**0
+ 17 .debug_str    00002fe2  00000000  00000000  0003430d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .comment      00000050  00000000  00000000  000372ec  2**0
+ 18 .comment      00000050  00000000  00000000  000372ef  2**0
                   CONTENTS, READONLY
- 19 .debug_frame  000029c4  00000000  00000000  0003733c  2**2
+ 19 .debug_frame  000029c4  00000000  00000000  00037340  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -738,18 +738,18 @@ void FSM_TrafficLight(const short index){
  80005bc:	2000003c 	.word	0x2000003c
  80005c0:	2000003d 	.word	0x2000003d
 
-080005c4 <FSM_ForStateProcessing>:
+080005c4 <FSM_ForRunStateProcessing>:
 
-void FSM_ForStateProcessing(void){
+void FSM_ForRunStateProcessing(void){
  80005c4:	b580      	push	{r7, lr}
  80005c6:	af00      	add	r7, sp, #0
 	switch (runState){
- 80005c8:	4b26      	ldr	r3, [pc, #152]	; (8000664 <FSM_ForStateProcessing+0xa0>)
+ 80005c8:	4b26      	ldr	r3, [pc, #152]	; (8000664 <FSM_ForRunStateProcessing+0xa0>)
  80005ca:	781b      	ldrb	r3, [r3, #0]
  80005cc:	3b01      	subs	r3, #1
  80005ce:	2b03      	cmp	r3, #3
- 80005d0:	d846      	bhi.n	8000660 <FSM_ForStateProcessing+0x9c>
- 80005d2:	a201      	add	r2, pc, #4	; (adr r2, 80005d8 <FSM_ForStateProcessing+0x14>)
+ 80005d0:	d846      	bhi.n	8000660 <FSM_ForRunStateProcessing+0x9c>
+ 80005d2:	a201      	add	r2, pc, #4	; (adr r2, 80005d8 <FSM_ForRunStateProcessing+0x14>)
  80005d4:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
  80005d8:	080005e9 	.word	0x080005e9
  80005dc:	080005f7 	.word	0x080005f7
@@ -764,22 +764,22 @@ void FSM_ForStateProcessing(void){
  80005ee:	2001      	movs	r0, #1
  80005f0:	f7ff ff60 	bl	80004b4 <FSM_TrafficLight>
 		break;
- 80005f4:	e034      	b.n	8000660 <FSM_ForStateProcessing+0x9c>
+ 80005f4:	e034      	b.n	8000660 <FSM_ForRunStateProcessing+0x9c>
 	case MODIFY_DURATION_RED_MODE:
 		//Blinking Red LED in 0.5s
 		blinking_counter--;
- 80005f6:	4b1c      	ldr	r3, [pc, #112]	; (8000668 <FSM_ForStateProcessing+0xa4>)
+ 80005f6:	4b1c      	ldr	r3, [pc, #112]	; (8000668 <FSM_ForRunStateProcessing+0xa4>)
  80005f8:	681b      	ldr	r3, [r3, #0]
  80005fa:	3b01      	subs	r3, #1
- 80005fc:	4a1a      	ldr	r2, [pc, #104]	; (8000668 <FSM_ForStateProcessing+0xa4>)
+ 80005fc:	4a1a      	ldr	r2, [pc, #104]	; (8000668 <FSM_ForRunStateProcessing+0xa4>)
  80005fe:	6013      	str	r3, [r2, #0]
 		if (blinking_counter <= 0) {
- 8000600:	4b19      	ldr	r3, [pc, #100]	; (8000668 <FSM_ForStateProcessing+0xa4>)
+ 8000600:	4b19      	ldr	r3, [pc, #100]	; (8000668 <FSM_ForRunStateProcessing+0xa4>)
  8000602:	681b      	ldr	r3, [r3, #0]
  8000604:	2b00      	cmp	r3, #0
- 8000606:	dc26      	bgt.n	8000656 <FSM_ForStateProcessing+0x92>
+ 8000606:	dc26      	bgt.n	8000656 <FSM_ForRunStateProcessing+0x92>
 			blinking_counter = HALF_SECOND / COUNTER_CYCLE;
- 8000608:	4b17      	ldr	r3, [pc, #92]	; (8000668 <FSM_ForStateProcessing+0xa4>)
+ 8000608:	4b17      	ldr	r3, [pc, #92]	; (8000668 <FSM_ForRunStateProcessing+0xa4>)
  800060a:	2232      	movs	r2, #50	; 0x32
  800060c:	601a      	str	r2, [r3, #0]
 			TogglePinLED(RED);
@@ -787,22 +787,22 @@ void FSM_ForStateProcessing(void){
  8000610:	f000 fcec 	bl	8000fec <TogglePinLED>
 		}
 		break;
- 8000614:	e01f      	b.n	8000656 <FSM_ForStateProcessing+0x92>
+ 8000614:	e01f      	b.n	8000656 <FSM_ForRunStateProcessing+0x92>
 	case MODIFY_DURATION_AMBER_MODE:
 		//Blinking Amber LED in 0.5s
 		blinking_counter--;
- 8000616:	4b14      	ldr	r3, [pc, #80]	; (8000668 <FSM_ForStateProcessing+0xa4>)
+ 8000616:	4b14      	ldr	r3, [pc, #80]	; (8000668 <FSM_ForRunStateProcessing+0xa4>)
  8000618:	681b      	ldr	r3, [r3, #0]
  800061a:	3b01      	subs	r3, #1
- 800061c:	4a12      	ldr	r2, [pc, #72]	; (8000668 <FSM_ForStateProcessing+0xa4>)
+ 800061c:	4a12      	ldr	r2, [pc, #72]	; (8000668 <FSM_ForRunStateProcessing+0xa4>)
  800061e:	6013      	str	r3, [r2, #0]
 		if (blinking_counter <= 0) {
- 8000620:	4b11      	ldr	r3, [pc, #68]	; (8000668 <FSM_ForStateProcessing+0xa4>)
+ 8000620:	4b11      	ldr	r3, [pc, #68]	; (8000668 <FSM_ForRunStateProcessing+0xa4>)
  8000622:	681b      	ldr	r3, [r3, #0]
  8000624:	2b00      	cmp	r3, #0
- 8000626:	dc18      	bgt.n	800065a <FSM_ForStateProcessing+0x96>
+ 8000626:	dc18      	bgt.n	800065a <FSM_ForRunStateProcessing+0x96>
 			blinking_counter = HALF_SECOND / COUNTER_CYCLE;
- 8000628:	4b0f      	ldr	r3, [pc, #60]	; (8000668 <FSM_ForStateProcessing+0xa4>)
+ 8000628:	4b0f      	ldr	r3, [pc, #60]	; (8000668 <FSM_ForRunStateProcessing+0xa4>)
  800062a:	2232      	movs	r2, #50	; 0x32
  800062c:	601a      	str	r2, [r3, #0]
 			TogglePinLED(AMBER);
@@ -810,22 +810,22 @@ void FSM_ForStateProcessing(void){
  8000630:	f000 fcdc 	bl	8000fec <TogglePinLED>
 		}
 		break;
- 8000634:	e011      	b.n	800065a <FSM_ForStateProcessing+0x96>
+ 8000634:	e011      	b.n	800065a <FSM_ForRunStateProcessing+0x96>
 	case MODIFY_DURATION_GREEN_MODE:
 		//Blinking Green LED in 0.5s
 		blinking_counter--;
- 8000636:	4b0c      	ldr	r3, [pc, #48]	; (8000668 <FSM_ForStateProcessing+0xa4>)
+ 8000636:	4b0c      	ldr	r3, [pc, #48]	; (8000668 <FSM_ForRunStateProcessing+0xa4>)
  8000638:	681b      	ldr	r3, [r3, #0]
  800063a:	3b01      	subs	r3, #1
- 800063c:	4a0a      	ldr	r2, [pc, #40]	; (8000668 <FSM_ForStateProcessing+0xa4>)
+ 800063c:	4a0a      	ldr	r2, [pc, #40]	; (8000668 <FSM_ForRunStateProcessing+0xa4>)
  800063e:	6013      	str	r3, [r2, #0]
 		if (blinking_counter <= 0) {
- 8000640:	4b09      	ldr	r3, [pc, #36]	; (8000668 <FSM_ForStateProcessing+0xa4>)
+ 8000640:	4b09      	ldr	r3, [pc, #36]	; (8000668 <FSM_ForRunStateProcessing+0xa4>)
  8000642:	681b      	ldr	r3, [r3, #0]
  8000644:	2b00      	cmp	r3, #0
- 8000646:	dc0a      	bgt.n	800065e <FSM_ForStateProcessing+0x9a>
+ 8000646:	dc0a      	bgt.n	800065e <FSM_ForRunStateProcessing+0x9a>
 			blinking_counter = HALF_SECOND / COUNTER_CYCLE;
- 8000648:	4b07      	ldr	r3, [pc, #28]	; (8000668 <FSM_ForStateProcessing+0xa4>)
+ 8000648:	4b07      	ldr	r3, [pc, #28]	; (8000668 <FSM_ForRunStateProcessing+0xa4>)
  800064a:	2232      	movs	r2, #50	; 0x32
  800064c:	601a      	str	r2, [r3, #0]
 			TogglePinLED(GREEN);
@@ -833,13 +833,13 @@ void FSM_ForStateProcessing(void){
  8000650:	f000 fccc 	bl	8000fec <TogglePinLED>
 		}
 		break;
- 8000654:	e003      	b.n	800065e <FSM_ForStateProcessing+0x9a>
+ 8000654:	e003      	b.n	800065e <FSM_ForRunStateProcessing+0x9a>
 		break;
  8000656:	bf00      	nop
- 8000658:	e002      	b.n	8000660 <FSM_ForStateProcessing+0x9c>
+ 8000658:	e002      	b.n	8000660 <FSM_ForRunStateProcessing+0x9c>
 		break;
  800065a:	bf00      	nop
- 800065c:	e000      	b.n	8000660 <FSM_ForStateProcessing+0x9c>
+ 800065c:	e000      	b.n	8000660 <FSM_ForRunStateProcessing+0x9c>
 		break;
  800065e:	bf00      	nop
 	}
@@ -1542,8 +1542,8 @@ int main(void)
  8000b32:	f7ff fcb5 	bl	80004a0 <FSM_ProcessingSelectModeButton>
 
 		  //State Processing
-		  FSM_ForStateProcessing();
- 8000b36:	f7ff fd45 	bl	80005c4 <FSM_ForStateProcessing>
+		  FSM_ForRunStateProcessing();
+ 8000b36:	f7ff fd45 	bl	80005c4 <FSM_ForRunStateProcessing>
 	  }
 
 	  //Display 7 SEG LEDs

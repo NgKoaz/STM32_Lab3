@@ -27,7 +27,7 @@ void FSM_ProcessingModifyButton(void);
 void FSM_ProcessingSelectModeButton(void);
 
 //change display
-void FSM_ForStateProcessing(void);
+void FSM_ForRunStateProcessing(void);
 
 
 #endif /* INC_INPUT_PROCESSING_H_ */

@@ -166,7 +166,7 @@ void FSM_TrafficLight(const short index){
 	}
 }
 
-void FSM_ForStateProcessing(void){
+void FSM_ForRunStateProcessing(void){
 	switch (runState){
 	case NORMAL_MODE:
 		//Run 2 traffic light FSMs.
